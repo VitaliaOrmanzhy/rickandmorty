@@ -12,6 +12,7 @@ export const fetchSingleCharacter = (id) => {
   return instance.get(`/character/${id}`);
 };
 
-export const filterByName = (value) => {
-  if (value !== "") return instance.get(`/character?name=${value}`);
+export const filterByName = (value, page) => {
+  if (value !== "")
+    return instance.get(`/character?page=${page}&name=${value}`);
 };

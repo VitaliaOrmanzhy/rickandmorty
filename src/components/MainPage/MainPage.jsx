@@ -17,22 +17,25 @@ import { CardSkeleton } from "./Card/CardSkeleton";
 export const MainPage = () => {
   const navigate = useNavigate();
   const [currPage, setPage] = useGetPage();
+  const [filteredPage, setFilteredPage] = useState(1);
   const [inputText, setInputText] = useState("");
   const [debouncedValue] = useDebounce(inputText, 500);
 
   useEffect(() => {
     navigate(`/${currPage}`, { replace: true });
-  }, [currPage, navigate]);
+  }, [currPage]);
 
   const { data: list, isLoading: listIsLoading } = useQuery({
     queryFn: () => fetchCharacters(currPage),
     queryKey: ["cards", currPage],
   });
 
-  const { data: filtered } = useQuery({
-    queryFn: () => filterByName(debouncedValue),
-    queryKey: ["filtered", debouncedValue],
+  const { data: filtered, isLoading: filteredIsLoading } = useQuery({
+    queryFn: () => filterByName(debouncedValue, filteredPage),
+    queryKey: ["filtered", debouncedValue, filteredPage],
   });
+
+  console.log("filtered", filtered);
 
   let sorted;
   if (list) sorted = sortArrByName([...list.data.results]);
@@ -44,12 +47,11 @@ export const MainPage = () => {
       {listIsLoading && <CardSkeleton cards={8} />}
       {!listIsLoading && (
         <>
-          <CardsList list={filtered ? filtered.data.results : sorted} />
-          <Pagination
-            next={getPageNumber(list.data.info.next)}
-            page={currPage}
-            prev={getPageNumber(list.data.info.prev)}
-            setPage={setPage}
+          <CardsList
+            list={filtered ? filtered.data.results : sorted}
+            info={filtered ? filtered.data.info : list.data.info}
+            page={filtered ? filteredPage : currPage}
+            setPage={filtered ? setFilteredPage : setPage}
           />
         </>
       )}
