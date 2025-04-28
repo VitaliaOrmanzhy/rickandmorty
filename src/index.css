@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.back-button::before {
+  content: '';
+  display: block;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  background-image: url(./img/icon/navigation/arrow_back_24px.svg);
+}
+
+.pagination-prev::before, .pagination-next::before {
+  content: '';
+  display: block;
+  background-image: url(./img/icon/navigation/arrow_back_24px.svg);
+  width: 16px;
+  height: 16px;
+}
+
+.pagination-next::before {
+  transform: rotate(180deg);
+}
+
