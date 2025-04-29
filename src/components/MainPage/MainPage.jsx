@@ -13,34 +13,30 @@ import { useNavigate, useSearchParams } from "react-router";
 import { useGetPage } from "../../hooks/useGetPage";
 import "react-loading-skeleton/dist/skeleton.css";
 import { CardSkeleton } from "./Card/CardSkeleton";
+import { useGetFiltered } from "../../hooks/useGetFiltered";
 
 export const MainPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [currPage, setPage] = useGetPage();
   const [filteredPage, setFilteredPage] = useState(1);
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useGetFiltered();
   const [debouncedValue] = useDebounce(inputText, 500);
   debugger;
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
-    const filtered = params.get("filtered");
 
-    if (filtered !== debouncedValue) {
-      if (debouncedValue === "") {
-        params.delete("filtered");
-      } else {
-        params.set("filtered", debouncedValue);
-      }
-      params.set("page", filtered ? filteredPage : currPage);
-      setSearchParams(params);
+    if (!debouncedValue) {
+      params.delete("filtered", debouncedValue);
+      params.set("page", currPage);
+    } else {
+      params.set("filtered", debouncedValue);
+      params.set("page", filteredPage);
     }
-  }, [currPage, filteredPage, debouncedValue]);
 
-  // useEffect(() => {
-  //   setFilteredPage(1);
-  // }, [debouncedValue]);
+    setSearchParams(params);
+  }, [debouncedValue, filteredPage]);
 
   const { data: list, isLoading: listIsLoading } = useQuery({
     queryFn: () => fetchCharacters(currPage),
@@ -52,8 +48,6 @@ export const MainPage = () => {
     queryKey: ["filtered", debouncedValue, filteredPage],
   });
 
-  console.log("filtered", filtered);
-
   let sorted;
   if (list) sorted = sortArrByName([...list.data.results]);
 
@@ -63,6 +57,7 @@ export const MainPage = () => {
       <Search
         inputText={inputText}
         setInputText={setInputText}
+<<<<<<< HEAD
         setFilteredPage={setFilteredPage}
         setCurrPage={setPage}
         searchParams={searchParams}
@@ -70,10 +65,17 @@ export const MainPage = () => {
       />
       {(listIsLoading || filteredIsLoading) && <CardSkeleton cards={8} />}
       {!listIsLoading && !filteredIsLoading && (
+=======
+        setPage={setPage}
+        setFilteredPage={setFilteredPage}
+      />
+      {listIsLoading && <CardSkeleton cards={8} />}
+      {!listIsLoading && (
+>>>>>>> f0ef265 (page search params, filtered search param)
         <>
           <CardsList
-            list={filtered ? filtered.data.results : sorted}
-            info={filtered ? filtered.data.info : list.data.info}
+            list={filtered ? filtered?.data.results : sorted}
+            info={filtered ? filtered?.data.info : list?.data.info}
             page={filtered ? filteredPage : currPage}
             setPage={filtered ? setFilteredPage : setPage}
           />

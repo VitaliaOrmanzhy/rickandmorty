@@ -4,19 +4,16 @@ import searchIcon from "../../../img/icon/search/Vector.svg";
 export const Search = ({
   inputText,
   setInputText,
+  setPage,
   setFilteredPage,
-  setCurrPage,
-  searchParams,
-  setSearchParams,
 }) => {
-  useEffect(() => {
-    const filteredSearchParam = searchParams.get("filtered");
-    if (filteredSearchParam) setInputText(filteredSearchParam);
-  }, []);
-
   const handleChange = (val) => {
     setInputText(val);
-    setCurrPage(1);
+    setFilteredPage(1);
+
+    if (!val) {
+      setPage(1);
+    }
   };
 
   return (
