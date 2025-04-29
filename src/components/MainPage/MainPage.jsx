@@ -57,21 +57,11 @@ export const MainPage = () => {
       <Search
         inputText={inputText}
         setInputText={setInputText}
-<<<<<<< HEAD
-        setFilteredPage={setFilteredPage}
-        setCurrPage={setPage}
-        searchParams={searchParams}
-        setSearchParams={setSearchParams}
-      />
-      {(listIsLoading || filteredIsLoading) && <CardSkeleton cards={8} />}
-      {!listIsLoading && !filteredIsLoading && (
-=======
         setPage={setPage}
         setFilteredPage={setFilteredPage}
       />
       {listIsLoading && <CardSkeleton cards={8} />}
       {!listIsLoading && (
->>>>>>> f0ef265 (page search params, filtered search param)
         <>
           <CardsList
             list={filtered ? filtered?.data.results : sorted}
