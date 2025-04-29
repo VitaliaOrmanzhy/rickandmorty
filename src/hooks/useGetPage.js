@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 
-export const useGetPage = () => {
-  const { page } = useParams();
-  const [currPage, setPage] = useState(page || 1);
-
-  //   useEffect(() => {
-  //     setPage(Number(page) || 1);
-  //   }, [page]);
+export const useGetPage = (initial) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const [currPage, setPage] = useState(pageParam || 1);
 
   return [currPage, setPage];
 };

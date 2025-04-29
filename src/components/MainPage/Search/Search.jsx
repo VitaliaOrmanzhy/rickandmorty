@@ -1,9 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import searchIcon from "../../../img/icon/search/Vector.svg";
 
-export const Search = ({ inputText, setInputText }) => {
+export const Search = ({
+  inputText,
+  setInputText,
+  setFilteredPage,
+  setCurrPage,
+  searchParams,
+  setSearchParams,
+}) => {
+  useEffect(() => {
+    const filteredSearchParam = searchParams.get("filtered");
+    if (filteredSearchParam) setInputText(filteredSearchParam);
+  }, []);
+
   const handleChange = (val) => {
     setInputText(val);
+    setCurrPage(1);
   };
 
   return (

@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <div className="max-w-7xl mr-auto ml-auto relative mt-[10px] mb-[10px] pl-20 pr-20">
         <Routes>
-          <Route path={routes.main + ":page?"} element={<MainPage />} />
+          <Route path={routes.main} element={<MainPage />} />
           <Route path={routes.character + ":id"} element={<InfoPage />} />
         </Routes>
       </div>

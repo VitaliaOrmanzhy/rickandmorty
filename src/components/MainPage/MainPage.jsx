@@ -9,21 +9,38 @@ import { getPageNumber } from "../../utils/getPageNumber";
 import { Search } from "./Search/Search";
 import { sortArrByName } from "../../utils/sortArrByName";
 import { Logo } from "./Logo/Logo";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { useGetPage } from "../../hooks/useGetPage";
 import "react-loading-skeleton/dist/skeleton.css";
 import { CardSkeleton } from "./Card/CardSkeleton";
 
 export const MainPage = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currPage, setPage] = useGetPage();
   const [filteredPage, setFilteredPage] = useState(1);
   const [inputText, setInputText] = useState("");
   const [debouncedValue] = useDebounce(inputText, 500);
+  debugger;
 
   useEffect(() => {
-    navigate(`/${currPage}`, { replace: true });
-  }, [currPage]);
+    const params = new URLSearchParams(searchParams);
+    const filtered = params.get("filtered");
+
+    if (filtered !== debouncedValue) {
+      if (debouncedValue === "") {
+        params.delete("filtered");
+      } else {
+        params.set("filtered", debouncedValue);
+      }
+      params.set("page", filtered ? filteredPage : currPage);
+      setSearchParams(params);
+    }
+  }, [currPage, filteredPage, debouncedValue]);
+
+  // useEffect(() => {
+  //   setFilteredPage(1);
+  // }, [debouncedValue]);
 
   const { data: list, isLoading: listIsLoading } = useQuery({
     queryFn: () => fetchCharacters(currPage),
@@ -43,9 +60,16 @@ export const MainPage = () => {
   return (
     <>
       <Logo />
-      <Search inputText={inputText} setInputText={setInputText} />
-      {listIsLoading && <CardSkeleton cards={8} />}
-      {!listIsLoading && (
+      <Search
+        inputText={inputText}
+        setInputText={setInputText}
+        setFilteredPage={setFilteredPage}
+        setCurrPage={setPage}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+      />
+      {(listIsLoading || filteredIsLoading) && <CardSkeleton cards={8} />}
+      {!listIsLoading && !filteredIsLoading && (
         <>
           <CardsList
             list={filtered ? filtered.data.results : sorted}
