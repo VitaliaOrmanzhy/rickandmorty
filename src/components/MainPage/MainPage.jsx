@@ -22,7 +22,6 @@ export const MainPage = () => {
   const [filteredPage, setFilteredPage] = useState(1);
   const [inputText, setInputText] = useGetFiltered();
   const [debouncedValue] = useDebounce(inputText, 500);
-  debugger;
 
   useEffect(() => {
     setSearchParams({ page: currPage });
@@ -30,9 +29,9 @@ export const MainPage = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
-
+    debugger;
     if (!debouncedValue) {
-      params.delete("filtered", debouncedValue);
+      params.delete("filtered");
       params.set("page", currPage);
     } else {
       params.set("filtered", debouncedValue);
