@@ -25,6 +25,10 @@ export const MainPage = () => {
   debugger;
 
   useEffect(() => {
+    setSearchParams({ page: currPage });
+  }, [currPage]);
+
+  useEffect(() => {
     const params = new URLSearchParams(searchParams);
 
     if (!debouncedValue) {
@@ -60,8 +64,8 @@ export const MainPage = () => {
         setPage={setPage}
         setFilteredPage={setFilteredPage}
       />
-      {listIsLoading && <CardSkeleton cards={8} />}
-      {!listIsLoading && (
+      {(listIsLoading || filteredIsLoading) && <CardSkeleton cards={8} />}
+      {!listIsLoading && !filteredIsLoading && (
         <>
           <CardsList
             list={filtered ? filtered?.data.results : sorted}
