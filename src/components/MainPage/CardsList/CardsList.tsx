@@ -1,10 +1,26 @@
 import React from "react";
 import { Card } from "../Card/Card";
-import { getPageNumber } from "../../../utils/getPageNumber";
+import { getPageNumberFromURL } from "../../../utils/getPageNumber";
 import { Pagination } from "../Pagination/Pagination";
 import { ErrorMessage } from "../../ErrorMessage/ErrorMessage";
+import { CharacterType } from "../../../types/types";
 
-export const CardsList = ({ list, info, page, setPage }) => {
+interface CardsListProps {
+  list: CharacterType[];
+  info: {
+    next: string | null;
+    prev: string | null;
+  };
+  page: number;
+  setPage: (val: number) => void;
+}
+
+export const CardsList: React.FC<CardsListProps> = ({
+  list,
+  info,
+  page,
+  setPage,
+}) => {
   console.log("LIST", list);
   return (
     <>
@@ -18,9 +34,9 @@ export const CardsList = ({ list, info, page, setPage }) => {
               })}
           </div>
           <Pagination
-            next={getPageNumber(info.next)}
+            next={info.next ? getPageNumberFromURL(info.next) : null}
             page={page}
-            prev={getPageNumber(info.prev)}
+            prev={info.prev ? getPageNumberFromURL(info.prev) : null}
             setPage={setPage}
           />
         </>

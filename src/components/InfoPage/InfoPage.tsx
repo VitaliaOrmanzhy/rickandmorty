@@ -5,10 +5,15 @@ import { fetchSingleCharacter } from "../../api/api";
 import { Profile } from "./Profile/Profile";
 import { getProfileFields } from "../../utils/getProfileFields";
 import { Button } from "../Button/Button";
+import { ProfileType } from "../../types/types";
 
 export const InfoPage = () => {
-  const { id } = useParams("id");
-  const { data, isLoading } = useQuery({
+  const { id } = useParams();
+  const {
+    data: profile,
+    isLoading,
+    error,
+  } = useQuery<ProfileType | undefined>({
     queryFn: () => fetchSingleCharacter(id),
     queryKey: ["character", id],
   });
@@ -24,7 +29,7 @@ export const InfoPage = () => {
   };
 
   let fields;
-  fields = getProfileFields(data?.data);
+  fields = getProfileFields(profile?.data);
 
   return (
     <div className="info-page">
@@ -35,7 +40,12 @@ export const InfoPage = () => {
         }
         handleClick={handleClick}
       />
-      <Profile profile={data?.data} isLoading={isLoading} fields={fields} />
+      <Profile
+        profile={profile?.data}
+        isLoading={isLoading}
+        error={error}
+        fields={fields}
+      />
     </div>
   );
 };

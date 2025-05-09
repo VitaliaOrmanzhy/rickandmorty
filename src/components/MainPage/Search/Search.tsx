@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import searchIcon from "../../../img/icon/search/Vector.svg";
 
-export const Search = ({
+interface SearchProps {
+  inputText: string;
+  setInputText: (val: string) => void;
+  setPage: (val: number) => void;
+  setFilteredPage: (val: number) => void;
+}
+
+export const Search: React.FC<SearchProps> = ({
   inputText,
   setInputText,
   setPage,
   setFilteredPage,
 }) => {
-  const handleChange = (val) => {
+  const handleChange = (val: string) => {
     setInputText(val);
     setFilteredPage(1);
 

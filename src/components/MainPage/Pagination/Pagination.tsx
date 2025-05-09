@@ -1,9 +1,20 @@
 import React from "react";
 import { PaginationButton } from "./PaginationButton/PaginationButton";
 
-export const Pagination = ({ prev, next, page, setPage }) => {
-  const handleSetPage = (val) => {
-    debugger;
+interface PaginationProps {
+  prev: number | null;
+  next: number | null;
+  page: number;
+  setPage: (val: number) => void;
+}
+
+export const Pagination: React.FC<PaginationProps> = ({
+  prev,
+  next,
+  page,
+  setPage,
+}) => {
+  const handleSetPage = (val: number) => {
     if (val !== page) setPage(val);
   };
 

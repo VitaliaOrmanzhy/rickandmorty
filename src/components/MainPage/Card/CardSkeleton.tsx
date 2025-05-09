@@ -1,7 +1,11 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 
-export const CardSkeleton = ({ cards }) => {
+interface CardSkeletonProps {
+  cards: number;
+}
+
+export const CardSkeleton: React.FC<CardSkeletonProps> = ({ cards }) => {
   return (
     <div className="grid gap-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-[40px]">
       {Array(cards)

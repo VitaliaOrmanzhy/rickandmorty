@@ -1,22 +1,44 @@
 import React from "react";
 import { imagePlaceholder } from "../../../constants/constants";
 import Skeleton from "react-loading-skeleton";
+import { ErrorMessage } from "../../ErrorMessage/ErrorMessage";
+import { CharacterType, ProfileFieldsType } from "../../../types/types";
 
-export const Profile = ({ profile, fields, isLoading }) => {
+interface ProfileProps {
+  profile: CharacterType | undefined;
+  error: Error | null;
+  fields: ProfileFieldsType;
+  isLoading: boolean;
+}
+
+export const Profile: React.FC<ProfileProps> = ({
+  profile,
+  error,
+  fields,
+  isLoading,
+}) => {
+  debugger;
+  if (error)
+    return (
+      <div className="profile max-w-[400px] m-auto flex items-center justify-center min-h-screen">
+        {error && <ErrorMessage message={error.message} />}
+      </div>
+    );
+
   return (
     <div className="profile max-w-[400px] ml-auto mr-auto">
       {isLoading ? (
         <Skeleton circle width={300} height={300} />
       ) : (
         <img
-          src={profile.image ? profile.image : imagePlaceholder}
+          src={profile?.image ? profile?.image : imagePlaceholder}
           className="rounded-[50%] ml-auto mr-auto"
           alt=""
         />
       )}
 
       <p className="text-center text-5xl mt-[5px]">
-        {isLoading ? <Skeleton /> : profile.name}
+        {isLoading ? <Skeleton /> : profile?.name}
       </p>
       <div className="details text-left m-[15px]">
         <h3 className="text-center m-[10px] text-xl text-[#8E8E93] font-medium">

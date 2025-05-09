@@ -2,8 +2,13 @@ import React from "react";
 import { imagePlaceholder } from "../../../constants/constants";
 import { NavLink } from "react-router";
 import { routes } from "../../../routes/routes";
+import { CharacterType } from "../../../types/types";
 
-export const Card = ({ item }) => {
+interface CardProps {
+  item: CharacterType;
+}
+
+export const Card: React.FC<CardProps> = ({ item }) => {
   return (
     <NavLink
       to={routes.character + item.id}
