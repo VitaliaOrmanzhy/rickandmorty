@@ -16,7 +16,7 @@ export const Card: React.FC<CardProps> = ({ item }) => {
     >
       <div className="image-container h-[168px] overflow-hidden">
         <img
-          className="image w-100% mt-[-30px]"
+          className="image w-[100%] mt-[-30px]"
           src={item.image || imagePlaceholder}
           alt=""
           loading="lazy"

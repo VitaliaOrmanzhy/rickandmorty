@@ -21,13 +21,12 @@ export const CardsList: React.FC<CardsListProps> = ({
   page,
   setPage,
 }) => {
-  console.log("LIST", list);
   return (
     <>
       {!list && <ErrorMessage message="This page doesn't exist" />}
       {list && (
         <>
-          <div className="grid gap-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-[40px]">
+          <div className="grid gap-[25px] grid-cols-2 max-[480px]:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-[40px]">
             {list &&
               list.map((item) => {
                 return <Card item={item} />;
