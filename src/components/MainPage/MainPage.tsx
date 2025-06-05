@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { CardsList } from "./CardsList/CardsList";
 import { fetchCharacters } from "../../api/api";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { useDebounce } from "use-debounce";
 import { Search } from "./Search/Search";
 import { sortArrByName } from "../../utils/sortArrByName";
@@ -15,7 +14,6 @@ import { useGetFiltered } from "../../hooks/useGetFiltered";
 import { CharacterType, ListType } from "../../types/types";
 import logo from "../../img/PngItem_438051 1.png";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
-import { getPageNumberFromURL } from "../../utils/getPageNumber";
 
 export const MainPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
