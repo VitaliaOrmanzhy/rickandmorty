@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { CardsList } from "./CardsList/CardsList";
-import { fetchCharacters, filterByName } from "../../api/api";
+import { fetchCharacters } from "../../api/api";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
@@ -14,12 +14,12 @@ import { CardSkeleton } from "./Card/CardSkeleton";
 import { useGetFiltered } from "../../hooks/useGetFiltered";
 import { CharacterType, ListType } from "../../types/types";
 import logo from "../../img/PngItem_438051 1.png";
+import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { getPageNumberFromURL } from "../../utils/getPageNumber";
 
 export const MainPage = () => {
-  // const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [currPage, setPage] = useGetPage();
-  const [filteredPage, setFilteredPage] = useState(1);
   const [inputText, setInputText] = useGetFiltered();
   const [debouncedValue] = useDebounce(inputText, 500);
 
@@ -34,21 +34,24 @@ export const MainPage = () => {
       params.set("page", currPage.toString());
     } else {
       params.set("filtered", debouncedValue);
-      params.set("page", filteredPage.toString());
+      params.set("page", currPage.toString());
     }
 
     setSearchParams(params);
-  }, [debouncedValue, filteredPage]);
+  }, [debouncedValue, currPage]);
 
-  const { data: list, isLoading: listIsLoading } = useQuery<ListType>({
-    queryFn: () => fetchCharacters(currPage),
-    queryKey: ["cards", currPage],
+  const {
+    data: list,
+    isLoading: listIsLoading,
+    error: listError,
+  } = useQuery<ListType>({
+    queryFn: () => fetchCharacters(debouncedValue, currPage),
+    queryKey: ["characters", debouncedValue, currPage],
   });
 
-  const { data: filtered, isLoading: filteredIsLoading } = useQuery<ListType>({
-    queryFn: () => filterByName(debouncedValue, filteredPage),
-    queryKey: ["filtered", debouncedValue, filteredPage],
-  });
+  useEffect(() => {
+    if (list) setPage((prev) => (list?.data.info.pages < prev ? 1 : prev));
+  }, [list]);
 
   const sorted: Array<CharacterType> = list
     ? sortArrByName([...list.data.results])
@@ -61,19 +64,19 @@ export const MainPage = () => {
         inputText={inputText}
         setInputText={setInputText}
         setPage={setPage}
-        setFilteredPage={setFilteredPage}
       />
-      {(listIsLoading || filteredIsLoading) && <CardSkeleton cards={8} />}
-      {!listIsLoading && list && !filteredIsLoading && (
+      {listIsLoading && <CardSkeleton cards={8} />}
+      {!listIsLoading && list && !listError && (
         <>
           <CardsList
-            list={filtered ? filtered.data.results : sorted}
-            info={filtered ? filtered.data.info : list.data.info}
-            page={filtered ? filteredPage : currPage}
-            setPage={filtered ? setFilteredPage : setPage}
+            list={sorted}
+            info={list.data.info}
+            page={currPage}
+            setPage={setPage}
           />
         </>
       )}
+      {listError && <ErrorMessage message={listError.message} />}
     </>
   );
 };

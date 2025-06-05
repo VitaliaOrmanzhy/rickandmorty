@@ -5,22 +5,20 @@ interface SearchProps {
   inputText: string;
   setInputText: (val: string) => void;
   setPage: (val: number) => void;
-  setFilteredPage: (val: number) => void;
 }
 
 export const Search: React.FC<SearchProps> = ({
   inputText,
   setInputText,
   setPage,
-  setFilteredPage,
 }) => {
   const handleChange = (val: string) => {
     setInputText(val);
-    setFilteredPage(1);
+    setPage(1);
 
-    if (!val) {
-      setPage(1);
-    }
+    // if (!val) {
+    //   setPage(1);
+    // }
   };
 
   return (

@@ -28,8 +28,7 @@ export const InfoPage = () => {
     }
   };
 
-  let fields;
-  fields = getProfileFields(profile?.data);
+  const fields = getProfileFields(profile?.data);
 
   return (
     <div className="info-page">

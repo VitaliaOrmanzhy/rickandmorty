@@ -18,8 +18,8 @@ export type ProfileType = {
 export type ListType = {
   data: {
     info: {
-      count?: number;
-      pages?: number;
+      count: number;
+      pages: number;
       next: string | null;
       prev: string | null;
     };

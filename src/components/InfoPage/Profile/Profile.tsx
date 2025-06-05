@@ -5,7 +5,7 @@ import { ErrorMessage } from "../../ErrorMessage/ErrorMessage";
 import { CharacterType, ProfileFieldsType } from "../../../types/types";
 
 interface ProfileProps {
-  profile: CharacterType | undefined;
+  profile?: CharacterType;
   error: Error | null;
   fields: ProfileFieldsType;
   isLoading: boolean;
@@ -17,13 +17,7 @@ export const Profile: React.FC<ProfileProps> = ({
   fields,
   isLoading,
 }) => {
-  debugger;
-  if (error)
-    return (
-      <div className="profile max-w-[400px] m-auto flex items-center justify-center min-h-screen">
-        {error && <ErrorMessage message={error.message} />}
-      </div>
-    );
+  if (error) return <ErrorMessage message={error.message} />;
 
   return (
     <div className="profile max-w-[400px] ml-auto mr-auto">
